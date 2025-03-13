@@ -180,7 +180,7 @@
        real :: rto = 0.          !none                 |cloud cover factor
        real :: rspc = 0.         !                     |
        real :: xx = 0.           !varies    |variable to hold calculation results
-
+       character(len=10) :: ch4module    !varies    | methane module type  !spark  
 
        !! initialize local variables
        deltawn = 0.
@@ -934,7 +934,19 @@
               else
                 soil1(j)%seq(k)%c = soil1(j)%hp(k)%c + soil1(j)%hs(k)%c + soil1(j)%microb(k)%c 
               endif
-
+              
+              !! ================================================================= !spark
+              ch4module = 'daycent'
+              select case (trim(ch4module))
+                case ('daycent')
+                  call ch4_daycent(k)
+                case ('dndc')
+                  call ch4_dndc(k)
+                case ("meres")
+                  call ch4_meres(k)
+              end select
+              !! ================================================================= !spark         
+               
         end if  !soil temp and soil water > 0.
 
       end do      !soil layer loop
